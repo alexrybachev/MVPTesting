@@ -7,9 +7,18 @@
 
 import UIKit
 
+protocol GreetingViewProtocol: AnyObject {
+    func setGreeting(_ greeting: String)
+}
+
 class ViewController: UIViewController {
     
     // MARK: - Properies
+    
+    var presenter: GreetingPresenterProtocol!
+    var person: Person!
+    
+    // MARK: - Views
     
     private let textLabel: UILabel = {
         let label = UILabel()
@@ -26,6 +35,8 @@ class ViewController: UIViewController {
         button.layer.cornerRadius = 20
         button.tintColor = .white
         button.setTitle("Press me", for: .normal)
+        
+        button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         return button
     }()
 
@@ -33,6 +44,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
+       
+        person = Person(name: "Tim", surname: "Cook")
+        presenter = GreetingPresenter(view: self, person: person)
     }
 
     // MARK: - Setup
@@ -56,6 +70,18 @@ class ViewController: UIViewController {
         button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    // MARK: - Button Action
+    
+    @objc func didTapButton(_ button: UIButton) {
+        presenter.showGreeting()
+    }
+}
+
+extension ViewController: GreetingViewProtocol {
+    func setGreeting(_ greeting: String) {
+        textLabel.text = greeting
     }
 }
 
