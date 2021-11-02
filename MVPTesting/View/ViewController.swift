@@ -9,7 +9,11 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    // MARK: - Properies
+    // MARK: - Properties
+    
+    private var person: Person!
+    
+    // MARK: - Views
     
     private let textLabel: UILabel = {
         let label = UILabel()
@@ -26,6 +30,7 @@ class ViewController: UIViewController {
         button.layer.cornerRadius = 20
         button.tintColor = .white
         button.setTitle("Press me", for: .normal)
+        button.addTarget(self, action: #selector(showGreetingPressed), for: .touchUpInside)
         return button
     }()
 
@@ -33,6 +38,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         setupHierarchy()
         setupLayout()
+        
+        person = Person(name: "Tim", surname: "Cook")
     }
 
     // MARK: - Setup
@@ -56,6 +63,13 @@ class ViewController: UIViewController {
         button.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    // MARK: - Button Action
+    
+    @objc func showGreetingPressed() {
+        let greeting = "Hello \(person.name) \(person.surname)!"
+        textLabel.text = greeting
     }
 }
 
